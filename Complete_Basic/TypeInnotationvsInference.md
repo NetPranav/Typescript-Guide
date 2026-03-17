@@ -1,4 +1,3 @@
-```markdown
 # Phase 2: Core Structures
 
 This phase is where TypeScript goes from just checking simple variables to actually shaping the data and logic of your applications. 
