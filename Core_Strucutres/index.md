@@ -1,113 +1,208 @@
-# Phase 2: Core Structures
+# 📘 TypeScript Core Structures Guide
 
-This folder covers the foundational ways to shape data and logic in TypeScript. By strictly defining objects, custom aliases, contracts, and functions, we eliminate the unpredictability of standard JavaScript.
+Welcome! This guide is designed for **quick revision + deep clarity** of core TypeScript concepts.
+
+Each section includes:
+- 🔹 Short explanation  
+- 🔹 Practical example  
+- 🔹 Navigation link  
 
 ---
 
-### [07. Object Types](./07_Object_Types.ts)
-**Concept:** Instead of letting objects hold any random data, Object Types define a strict "mold." They dictate exactly what keys must exist, what data types they hold, and which properties are optional or read-only.
+## 📂 07 - Object Types
 
-**Example:**
-```typescript
-let droneConfig: { 
-    readonly id: string; // Cannot be changed later
-    model: string; 
-    topSpeed: number; 
-    hasGPS?: boolean;    // Optional property
-} = {
-    id: "DRN-001",
-    model: "Cinewhoop V2",
-    topSpeed: 120
-    // hasGPS is safely left out
+👉 [Go to File](./07_Object_Types.ts)
+
+### 🔹 What are Object Types?
+Object types define the **shape of an object** — what properties it must have and their types.
+
+### 🔹 Example
+```ts
+let user: { name: string; age: number };
+
+user = {
+  name: "Pranav",
+  age: 20
 };
-08. Type Aliases
-Concept: Writing out complex object shapes over and over is messy. The type keyword lets you create a reusable custom name (a blueprint) for any type, making your code incredibly clean and easy to read.
+```
 
-Example:
+### 💡 Tip
+Use object types when you want **strict structure without reuse**.
 
-TypeScript
-// Defining the blueprint once
-type PilotProfile = {
-    username: string;
-    flightHours: number;
-    isActive: boolean;
+---
+
+## 📂 08 - Type Aliases
+
+👉 [Go to File](./08_Type_Aliases.ts)
+
+### 🔹 What are Type Aliases?
+Type aliases let you **create reusable custom types**.
+
+### 🔹 Example
+```ts
+type User = {
+  name: string;
+  age: number;
 };
 
-// Reusing it easily
-let pilot1: PilotProfile = { username: "pranav_fpv", flightHours: 150, isActive: true };
-let pilot2: PilotProfile = { username: "raja_r", flightHours: 45, isActive: false };
-09. Interfaces
-Concept: Interfaces act as strict contracts, primarily used in Object-Oriented Programming. They define the shape of an object or class. A major superpower of interfaces is that they can extend (inherit) from one another.
-
-Example:
-
-TypeScript
-interface BasicComponent {
-    brand: string;
-    weightGrams: number;
-}
-
-// Inherits from BasicComponent and adds new rules
-interface Motor extends BasicComponent {
-    kvRating: number;
-}
-
-const myMotor: Motor = {
-    brand: "Xing",
-    weightGrams: 34,
-    kvRating: 2750
+let u1: User = {
+  name: "Pranav",
+  age: 20
 };
-10. Interfaces vs. Types
-Concept: For 90% of basic objects, they do the exact same thing. However, type is better for Unions and primitive renaming, while interface is better for Object-Oriented classes and automatically merging declarations.
+```
 
-Example (When to use Type):
+### 💡 Tip
+Use `type` when:
+- You want unions (`string | number`)
+- You want flexibility
 
-TypeScript
-// ONLY Types can do Unions. Interfaces cannot do this!
-type FlightMode = "Acro" | "Angle" | "Horizon"; 
-let currentMode: FlightMode = "Acro";
-Example (When to use Interface):
+---
 
-TypeScript
-interface Flyable { takeoff(): void; }
+## 📂 09 - Interfaces
 
-// Classes can strictly implement interfaces
-class Quadcopter implements Flyable {
-    takeoff() { console.log("Taking off!"); }
-}
-11. Typing Functions
-Concept: Functions are where bugs thrive. TypeScript locks them down by strictly defining what data is allowed to enter (Parameters) and exactly what data must be returned (Return Type).
+👉 [Go to File](./09_Interfaces.ts)
 
-Example:
+### 🔹 What are Interfaces?
+Interfaces define object structure **like types**, but are more extendable.
 
-TypeScript
-// (price, tax) are locked to numbers. The function MUST return a number.
-function calculateTotal(price: number, tax: number = 0.18): number {
-    return price + (price * tax);
+### 🔹 Example
+```ts
+interface User {
+  name: string;
+  age: number;
 }
 
-// Arrow function syntax for a function that returns nothing (void)
-const logStatus = (message: string): void => {
-    console.log(`STATUS: ${message}`);
+let u1: User = {
+  name: "Pranav",
+  age: 20
 };
-12. Function Overloading
-Concept: Sometimes a function needs to be called in multiple different ways (e.g., searching by a Number ID or by a String Email). Overloading lets you write multiple strict "rules" (signatures) that all route into a single underlying logic block.
+```
 
-Example:
+### 💡 Tip
+Interfaces are best for:
+- Large projects
+- Extending structures
 
-TypeScript
-// 1. The Rules (Signatures)
-function getPart(id: number): string;
-function getPart(name: string): string;
+---
 
-// 2. The Implementation (Handles both rules)
-function getPart(query: number | string): string {
-    if (typeof query === "number") {
-        return `Fetching part by ID: ${query}`;
-    } else {
-        return `Fetching part by Name: ${query}`;
-    }
+## 📂 10 - Interfaces vs Types
+
+👉 [Go to File](./10_Interfaces_vs_types.ts)
+
+### 🔹 Key Difference
+
+| Feature        | Interface | Type |
+|---------------|----------|------|
+| Extendable     | ✅ Yes   | ⚠️ Limited |
+| Union Support  | ❌ No    | ✅ Yes |
+| Reopening      | ✅ Yes   | ❌ No |
+
+### 🔹 Example
+```ts
+interface A {
+  name: string;
 }
 
-getPart(8847);      // Valid: Matches signature 1
-getPart("Propeller"); // Valid: Matches signature 2
+interface A {
+  age: number;
+}
+
+// merged automatically
+```
+
+```ts
+type A = { name: string };
+// type A = { age: number }; ❌ Error
+```
+
+### 💡 My Opinion
+👉 Use:
+- `interface` → for objects  
+- `type` → for everything else  
+
+---
+
+## 📂 11 - Typing Functions
+
+👉 [Go to File](./11_Typing_functions.ts)
+
+### 🔹 Why Typing Functions?
+Ensures:
+- Correct parameters
+- Correct return type
+
+### 🔹 Example
+```ts
+function add(a: number, b: number): number {
+  return a + b;
+}
+```
+
+### 🔹 Arrow Function
+```ts
+const greet = (name: string): string => {
+  return "Hello " + name;
+};
+```
+
+### 💡 Tip
+Always define return type in important functions → helps avoid bugs.
+
+---
+
+## 📂 12 - Function Overloading
+
+👉 [Go to File](./12_function_overloading.ts)
+
+### 🔹 What is Function Overloading?
+Allows multiple function signatures for **different input types**.
+
+### 🔹 Example
+```ts
+function combine(a: string, b: string): string;
+function combine(a: number, b: number): number;
+
+function combine(a: any, b: any) {
+  return a + b;
+}
+```
+
+### 🔹 Usage
+```ts
+combine(2, 3);        // number
+combine("Hi ", "JS"); // string
+```
+
+### 💡 Tip
+Use overloading when:
+- Behavior depends on input type
+- You want better autocomplete
+
+---
+
+# 🚀 Final Thoughts
+
+This repo is designed as a:
+- ⚡ Quick revision guide
+- 🧠 Concept clarity builder
+- 💻 Practical TypeScript reference
+
+### 🧠 Best Way to Use
+1. Read explanation  
+2. Run the `.ts` file  
+3. Modify code yourself  
+
+---
+
+# ⭐ Pro Tip (Important)
+
+Don't just read —  
+👉 Break things  
+👉 Change types  
+👉 See errors  
+
+That’s how TypeScript actually clicks.
+
+---
+
+Happy Coding 🚀
